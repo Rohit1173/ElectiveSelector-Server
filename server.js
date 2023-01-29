@@ -55,6 +55,7 @@ app.post('/login',async (req, res) => {
     if(user===null){
       res.status(404).json({status: 0,message:"User not found"})
     }
+    else{
     
     if(bcrypt.compare(userPassword,user.userPassword)){
       const payload = {userName:userName,userPassword:userPassword} ;
@@ -67,6 +68,7 @@ app.post('/login',async (req, res) => {
     else{
       res.status(404).json({status: 0,message:"Incorrect Password"})
     }
+  }
 
   }
   catch(err){
