@@ -110,6 +110,21 @@ app.post('/signup', async (req, res) => {
   }
 
 })
+app.post("profVerify",(req, res) => {
+  try {
+    let userEmail = req.body.userEmail
+    if(userEmail=='sairohitchappa01@gmail.com'){
+      res.status(200).json({status:1,message:prof})
+    }
+    else{
+      res.status(200).json({status:1,message:student})
+    }
+
+  }catch (error) {
+    console.log(error.message)
+       res.status(401).json({status: 0, message: error.message});
+  }
+})
 
 app.get("/jwt",(req, res) => {
     try{
