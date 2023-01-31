@@ -110,14 +110,14 @@ app.post('/signup', async (req, res) => {
   }
 
 })
-app.post("profVerify",(req, res) => {
+app.post('/profVerify',(req, res) => {
   try {
     let userEmail = req.body.userEmail
     if(userEmail=='sairohitchappa01@gmail.com'){
-      res.status(200).json({status:1,message:prof})
+      res.status(200).json({status:1,message:"prof"})
     }
     else{
-      res.status(200).json({status:1,message:student})
+      res.status(200).json({status:1,message:"student"})
     }
 
   }catch (error) {
