@@ -110,7 +110,7 @@ app.post('/signup', async (req, res) => {
   }
 
 })
-app.post('/profVerify',(req, res) => {
+app.post('/profVerify',async(req, res) => {
   try {
     let userEmail = req.body.userEmail
     if(userEmail=='sairohitchappa01@gmail.com'){
