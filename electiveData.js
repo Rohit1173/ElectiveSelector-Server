@@ -39,6 +39,10 @@ let electiveSchema = mongoose.Schema({
     addedTime:{
         type:String,
         required: true,
+    },
+    scheduledAt:{
+        type:String,
+        required: true,
     }
     });
 

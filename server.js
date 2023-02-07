@@ -7,6 +7,7 @@ const cors = require('cors');
 const jwt = require("jsonwebtoken");
 const bcrypt=require("bcrypt")
 const nodemailer = require('nodemailer');
+const electiveData = require('./electiveData');
 
 require("dotenv").config();
 require("dotenv/config");
@@ -203,6 +204,17 @@ app.post('/addElectiveDetails',async(req,res)=>{
     res.status(401).json({status:0,message: err.message});
 
   }
+})
+app.get('/announcement',async(req, res)=>{
+  electiveData.find({},(err, data)=>{
+    if (err) {
+      console.log({status: 0, message: err});
+      res.json({status: 0, message: err});
+  } else {
+      res.json({status: 1, message:data});
+  }
+  })
+
 })
 
 app.listen(port, () => {
