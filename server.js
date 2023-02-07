@@ -1,6 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const User = require('./user')
+const ElectiveData=require('./electiveData')
 const bodyParser = require("body-parser");
 const cors = require('cors');
 const jwt = require("jsonwebtoken");
@@ -171,6 +172,31 @@ app.post('/otp',async (req, res) => {
   
     
    
+  }
+  catch(err) {
+    console.log(err.message);
+    res.status(401).json({status:0,message: err.message});
+
+  }
+})
+app.post('/addElectiveDetails',async(req,res)=>{
+  try{
+    let semNum=req.body.semNum
+    let electiveNum=req.body.electiveNum
+    let x=  await ElectiveData.findOne({semNum:semNum,electiveNum:electiveNum});
+    if(x!==null){
+       res.status(200).json({status:0,message:"ELECTIVE FOR THIS SEM ALREADY EXISTS TRY CONTACTING THE DEVELOPER"})
+    }
+    else{
+    ElectiveData.create(req.body,(err, user)=>{
+      if(err){
+        console.log(err.message);
+        res.status(400).json({status:0,message:err.message});
+      }
+       res.status(200).json({status: 1, message:"Success"});
+    })
+  }
+
   }
   catch(err) {
     console.log(err.message);
