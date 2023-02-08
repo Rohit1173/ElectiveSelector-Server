@@ -184,20 +184,16 @@ app.post('/addElectiveDetails',async(req,res)=>{
   try{
     let semNum=req.body.semNum
     let electiveNum=req.body.electiveNum
-    let x=  await ElectiveData.findOne({semNum:semNum,electiveNum:electiveNum});
-    if(x!==null){
-       res.status(200).json({status:0,message:"ELECTIVE FOR THIS SEM ALREADY EXISTS TRY CONTACTING THE DEVELOPER"})
-    }
-    else{
-    ElectiveData.create(req.body,(err, user)=>{
+    await ElectiveData.findOneAndUpdate({semNum:semNum,electiveNum:electiveNum},{semNum:req.body.semNum,electiveNum:req.body.electiveNum,sub1:req.body.sub1,sub2:req.body.sub2,sub3:req.body.sub3,addedBy:req.body.addedBy,addedTime:req.body.addedTime},(err)=>{
       if(err){
-        console.log(err.message);
-        res.status(400).json({status:0,message:err.message});
+        res.status(401).json({status:0,message: err.message});
       }
-       res.status(200).json({status: 1, message:"Success"});
-    })
-  }
+      else{
+        res.status(401).json({status:0,message: "SUCCESS"});
+      }
+    });
 
+    
   }
   catch(err) {
     console.log(err.message);
