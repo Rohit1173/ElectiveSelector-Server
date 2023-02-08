@@ -115,7 +115,7 @@ app.post('/signup', async (req, res) => {
 app.post('/profVerify',async(req, res) => {
   try {
     let userEmail = req.body.userEmail
-    if(userEmail=='sairohitchappa01@gmail.com'){
+    if(userEmail==='sairohitchappa01@gmail.com'){
       res.status(200).json({status:1,message:"prof"})
     }
     else{
@@ -214,6 +214,21 @@ app.get('/announcement',async(req, res)=>{
       res.json({status: 1, message:data});
   }
   })
+
+})
+app.post('/sem',async(req,res)=>{
+
+  let semNum=req.body.semNum
+  electiveData.find({semNum:semNum},(err,data)=>{
+    if(err) {
+      console.log({status: 0, message: err});
+      res.json({status: 0, message: err});
+    }
+    else{
+      res.json({status: 0, message:{e1s1:data[0].sub1,e1s2:data[0].sub2,e1s3:data[0].sub2,e2s1:data[1].sub1,e2s2:data[1].sub2,e2s3:data[1].sub2}})
+    }
+
+})
 
 })
 
