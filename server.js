@@ -180,11 +180,17 @@ app.post('/otp',async (req, res) => {
 
   }
 })
-app.post('/addElectiveDetails',async(req,res)=>{
+app.post('/addElectiveDetails',(req,res)=>{
   try{
     let semNum=req.body.semNum
     let electiveNum=req.body.electiveNum
-     ElectiveData.findOneAndUpdate({semNum:semNum,electiveNum:electiveNum},{semNum:req.body.semNum,electiveNum:req.body.electiveNum,sub1:req.body.sub1,sub2:req.body.sub2,sub3:req.body.sub3,addedBy:req.body.addedBy,addedTime:req.body.addedTime},(err)=>{
+     ElectiveData.findOneAndUpdate({semNum:semNum,electiveNum:electiveNum},
+      {semNum:req.body.semNum,
+        electiveNum:req.body.electiveNum,sub1:req.body.sub1,
+        sub2:req.body.sub2,
+        sub3:req.body.sub3,
+        addedBy:req.body.addedBy,
+        addedTime:req.body.addedTime},(err)=>{
       if(err){
         res.status(401).json({status:0,message: err.message});
       }
