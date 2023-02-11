@@ -234,7 +234,7 @@ app.post('/sem',async(req,res)=>{
       res.status(401).json({status: 0, message: err});
     }
     else{
-      res.status(200).json({status: 1, message:{e1s1:data[0].sub1,e1s2:data[0].sub2,e1s3:data[0].sub2,e2s1:data[1].sub1,e2s2:data[1].sub2,e2s3:data[1].sub2}})
+      res.status(200).json({status: 1, message:{sub1:data[0].sub1,sub2:data[0].sub2,sub3:data[0].sub3,scheduledAt:data[0].scheduledAt}})
     }
 
 })
