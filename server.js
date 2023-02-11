@@ -102,7 +102,6 @@ app.post('/signup', async (req, res) => {
                const secret = process.env.SECRET_KEY;
                const options = { expiresIn:maxAge };
                const token = jwt.sign(payload, secret, options);
-               // Send response
                res.status(200).json({status: 1, message: token});
     })
   }
