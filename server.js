@@ -7,7 +7,6 @@ const cors = require('cors');
 const jwt = require("jsonwebtoken");
 const bcrypt=require("bcrypt")
 const nodemailer = require('nodemailer');
-const { findOne } = require('./user');
 
 require("dotenv").config();
 require("dotenv/config");
@@ -222,22 +221,41 @@ app.get('/announcement',async(req, res)=>{
 })
 app.post('/sem',async(req,res)=>{
 
+  try{
+
   let semNum=req.body.semNum
-  const elective = await ElectiveData.findOne({semNum:semNum})
-  if(elective===null){
-    res.status(401).json({status:0,message:{e1s1:"NA",e1s2:"NA",e1s3:"NA",e2s1:"NA",e2s2:"NA",e2s3:"NA"}})
+  const elective1 = await ElectiveData.findOne({semNum:semNum,electiveNum:'1'})
+  const elective2 = await ElectiveData.findOne({semNum:semNum,electiveNum:'2'})
+  let e1s1= {subTitle:"NA",facultyName:"NA"}
+  let e1s2= {subTitle:"NA",facultyName:"NA"}
+  let e1s3= {subTitle:"NA",facultyName:"NA"}
+  let e2s1= {subTitle:"NA",facultyName:"NA"}
+  let e2s2= {subTitle:"NA",facultyName:"NA"}
+  let e2s3= {subTitle:"NA",facultyName:"NA"}
+  let scheduledAt1="NA"
+  let scheduledAt2="NA"
+  if(elective1!==null){
+     e1s1=elective1.sub1
+     e1s2=elective1.sub2
+     e1s3=elective1.sub3
+     scheduledAt1=elective1.scheduledAt
+     
   }
+  if(elective2!==null){
+     e2s1=elective2.sub1
+     e2s2=elective2.sub2
+     e2s3=elective2.sub3
+     scheduledAt2=elective2.scheduledAt
+     
+  }
+  res.status(200).json({status:1,message: {e1s1:e1s1,e1s2:e1s2,e1s3:e1s3,scheduledAt1:scheduledAt1,e2s1:e2s1,e2s2:e2s2,e2s3:e2s3,scheduledAt2:scheduledAt2}});
+  }
+  catch(err) {
+    console.log(err.message);
+    res.status(401).json({status:0,message: err.message});
 
-  ElectiveData.find({semNum:semNum},(err,data)=>{
-    if(err) {
-      console.log({status: 0, message: err});
-      res.status(401).json({status: 0, message: err});
-    }
-    else{
-      res.status(200).json({status: 1, message:{sub1:data[0].sub1,sub2:data[0].sub2,sub3:data[0].sub3,scheduledAt:data[0].scheduledAt}})
-    }
-
-})
+  }
+ 
 
 })
 
