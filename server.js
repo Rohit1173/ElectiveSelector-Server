@@ -7,7 +7,7 @@ const cors = require('cors');
 const jwt = require("jsonwebtoken");
 const bcrypt=require("bcrypt")
 const nodemailer = require('nodemailer');
-const electiveData = require('./electiveData');
+const { findOne } = require('./user');
 
 require("dotenv").config();
 require("dotenv/config");
@@ -180,25 +180,28 @@ app.post('/otp',async (req, res) => {
 
   }
 })
-app.post('/addElectiveDetails',(req,res)=>{
+app.post('/addElectiveDetails', async(req,res)=>{
   try{
     let semNum=req.body.semNum
     let electiveNum=req.body.electiveNum
-     ElectiveData.findOneAndUpdate({semNum:semNum,electiveNum:electiveNum},
-      {semNum:req.body.semNum,
-        electiveNum:req.body.electiveNum,sub1:req.body.sub1,
-        sub2:req.body.sub2,
-        sub3:req.body.sub3,
-        addedBy:req.body.addedBy,
-        addedTime:req.body.addedTime},(err)=>{
-      if(err){
-        res.status(401).json({status:0,message: err.message});
-      }
-      else{
-        res.status(200).json({status:1,message: "SUCCESS"});
-      }
-    });
 
+    const elective = await ElectiveData.findOne({semNum:semNum,electiveNum:electiveNum})
+   if(elective!==null){
+      console.log("You Have Already added Subjects for this Elective , Try contacting the Developer")
+      res.status(401).json({status:0,message: "You Have Already added Subjects for this Elective , Try contacting the Developer"});
+   }
+   else{
+   
+ElectiveData.create(req.body,(err, electiveData)=>{
+  if(err){
+    console.log(err.message);
+    res.status(401).json({status:0,message: err.message});
+  }
+  else{
+     res.status(200).json({status: 1, message:"SUCCESS"});
+  }
+})
+}
     
   }
   catch(err) {
@@ -208,12 +211,12 @@ app.post('/addElectiveDetails',(req,res)=>{
   }
 })
 app.get('/announcement',async(req, res)=>{
-  electiveData.find({},(err, data)=>{
+  ElectiveData.find({},(err, data)=>{
     if (err) {
       console.log({status: 0, message: err});
-      res.json({status: 0, message: err});
+      res.status(401).json({status: 0, message: err});
   } else {
-      res.json({status: 1, message:data});
+      res.status(200).json({status: 1, message:data});
   }
   })
 
@@ -221,13 +224,18 @@ app.get('/announcement',async(req, res)=>{
 app.post('/sem',async(req,res)=>{
 
   let semNum=req.body.semNum
-  electiveData.find({semNum:semNum},(err,data)=>{
+  const elective = await ElectiveData.findOne({semNum:semNum})
+  if(elective===null){
+    res.status(401).json({status:0,message:{e1s1:"NA",e1s2:"NA",e1s3:"NA",e2s1:"NA",e2s2:"NA",e2s3:"NA"}})
+  }
+
+  ElectiveData.find({semNum:semNum},(err,data)=>{
     if(err) {
       console.log({status: 0, message: err});
-      res.json({status: 0, message: err});
+      res.status(401).json({status: 0, message: err});
     }
     else{
-      res.json({status: 1, message:{e1s1:data[0].sub1,e1s2:data[0].sub2,e1s3:data[0].sub2,e2s1:data[1].sub1,e2s2:data[1].sub2,e2s3:data[1].sub2}})
+      res.status(200).json({status: 1, message:{e1s1:data[0].sub1,e1s2:data[0].sub2,e1s3:data[0].sub2,e2s1:data[1].sub1,e2s2:data[1].sub2,e2s3:data[1].sub2}})
     }
 
 })
