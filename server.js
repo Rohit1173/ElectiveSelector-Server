@@ -113,7 +113,7 @@ app.post('/signup', async (req, res) => {
 app.post('/profVerify',async(req, res) => {
   try {
     let userEmail = req.body.userEmail
-    let user= User.findOne({email: userEmail})
+    let user= User.findOne({userEmail: userEmail})
     if(user===null){
       await User.create(req.body,(err, user) => {
         if(err){
