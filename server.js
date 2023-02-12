@@ -113,6 +113,15 @@ app.post('/signup', async (req, res) => {
 app.post('/profVerify',async(req, res) => {
   try {
     let userEmail = req.body.userEmail
+    let user= User.findOne({email: userEmail})
+    if(user===null){
+      await User.create(req.body,(err, user) => {
+        if(err){
+          console.log(err.message);
+          res.status(400).json({status:0,message:err.message});
+        }
+      })
+    }
     if(userEmail==='sairohitchappa01@gmail.com'){
       res.status(200).json({status:1,message:"prof"})
     }
@@ -222,7 +231,6 @@ app.get('/announcement',async(req, res)=>{
 app.post('/sem',async(req,res)=>{
 
   try{
-
   let semNum=req.body.semNum
   const elective1 = await ElectiveData.findOne({semNum:semNum,electiveNum:'1'})
   const elective2 = await ElectiveData.findOne({semNum:semNum,electiveNum:'2'})
@@ -256,6 +264,21 @@ app.post('/sem',async(req,res)=>{
 
   }
  
+
+})
+app.post('/choose',async(req, res)=>{
+  let userEmail = req.body.userEmail
+  let semNum=req.body.semNum
+  let electiveNum=req.body.electiveNum
+  let choiceString=req.body.choiceString
+  let user = User.findOne({userEmail: userEmail})
+  if(electiveNum==='1'){
+    user.el1=choiceString;
+  }
+  else{
+    user.el2=choiceString;
+  }
+  await user.save()
 
 })
 
