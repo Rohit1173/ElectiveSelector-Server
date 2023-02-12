@@ -9,9 +9,11 @@ userEmail:{
 },
 el1:{
   type:String,
+  default:'222'
 },
 el2:{
   type:String,
+  default:'222'
 }
 
 });

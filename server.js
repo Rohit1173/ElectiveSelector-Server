@@ -244,52 +244,22 @@ app.post('/sem',async(req,res)=>{
   let e2s3= {subTitle:"NA",facultyName:"NA"}
   let scheduledAt1="NA"
   let scheduledAt2="NA"
-  let a='0'
-  let b='0'
-  let c='0'
-  let d='0'
-  let e='0'
-  let f='0'
-  let choiceString1="000"
-  let choiceString2="000"
+  choiceString1=user.el1
+  choiceString2=user.el2
   if(elective1!==null){
      e1s1=elective1.sub1
      e1s2=elective1.sub2
      e1s3=elective1.sub3
      scheduledAt1=elective1.scheduledAt
-     if(e1s1!=='NA'){
-      a='2'
-     }
-     if(e1s2!=='NA'){
-      b='2'
-     }
-     if(e1s3!=='NA'){
-      c='2'
-     }
   }
   if(elective2!==null){
      e2s1=elective2.sub1
      e2s2=elective2.sub2
      e2s3=elective2.sub3
      scheduledAt2=elective2.scheduledAt
-     if(e2s1!=='NA'){
-      d='2'
-     }
-     if(e2s2!=='NA'){
-      e='2'
-     }
-     if(e2s3!=='NA'){
-      f='2'
-     }
   }
-  choiceString1=a+b+c
-  choiceString2=d+e+f
-  if(user.el1!==undefined){
-    choiceString1=user.el1
-  }
-  if(user.el2!==undefined){
-    choiceString2=user.el2
-  }
+    
+  
   res.status(200).json({status:1,message: {e1s1:e1s1,e1s2:e1s2,e1s3:e1s3,scheduledAt1:scheduledAt1,choiceString1:choiceString1,e2s1:e2s1,e2s2:e2s2,e2s3:e2s3,scheduledAt2:scheduledAt2,choiceString2:choiceString2}});
   }
   catch(err) {
