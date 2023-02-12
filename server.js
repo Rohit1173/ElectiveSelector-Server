@@ -244,19 +244,37 @@ app.post('/sem',async(req,res)=>{
   let e2s3= {subTitle:"NA",facultyName:"NA"}
   let scheduledAt1="NA"
   let scheduledAt2="NA"
-  let choiceString1="111"
-  let choiceString2="111"
+  let choiceString1="000"
+  let choiceString2="000"
   if(elective1!==null){
      e1s1=elective1.sub1
      e1s2=elective1.sub2
      e1s3=elective1.sub3
      scheduledAt1=elective1.scheduledAt
+     if(e1s1!=='NA'){
+      choiceString1[0]='2'
+     }
+     if(e1s2!=='NA'){
+      choiceString1[1]='2'
+     }
+     if(e1s3!=='NA'){
+      choiceString1[2]='2'
+     }
   }
   if(elective2!==null){
      e2s1=elective2.sub1
      e2s2=elective2.sub2
      e2s3=elective2.sub3
      scheduledAt2=elective2.scheduledAt
+     if(e2s1!=='NA'){
+      choiceString1[0]='2'
+     }
+     if(e2s2!=='NA'){
+      choiceString1[1]='2'
+     }
+     if(e2s3!=='NA'){
+      choiceString1[2]='2'
+     }
   }
   if(user.el1!==undefined){
     choiceString1=user.el1
