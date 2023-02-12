@@ -267,11 +267,13 @@ app.post('/sem',async(req,res)=>{
 
 })
 app.post('/choose',async(req, res)=>{
+
+  try{
   let userEmail = req.body.userEmail
   let semNum=req.body.semNum
   let electiveNum=req.body.electiveNum
   let choiceString=req.body.choiceString
-  let user = User.findOne({userEmail: userEmail})
+  let user = await User.findOne({userEmail: userEmail})
   if(electiveNum==='1'){
     user.el1=choiceString;
   }
@@ -279,6 +281,13 @@ app.post('/choose',async(req, res)=>{
     user.el2=choiceString;
   }
   await user.save()
+  res.status(200).json({status: 1, message:"SUCCESS"});
+}
+catch(err) {
+  console.log(err.message);
+  res.status(401).json({status:0,message: err.message});
+
+}
 
 })
 
