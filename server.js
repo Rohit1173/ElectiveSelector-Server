@@ -267,13 +267,13 @@ app.post('/sem',async(req,res)=>{
      e2s3=elective2.sub3
      scheduledAt2=elective2.scheduledAt
      if(e2s1!=='NA'){
-      choiceString1[0]='2'
+      choiceString2[0]='2'
      }
      if(e2s2!=='NA'){
-      choiceString1[1]='2'
+      choiceString2[1]='2'
      }
      if(e2s3!=='NA'){
-      choiceString1[2]='2'
+      choiceString2[2]='2'
      }
   }
   if(user.el1!==undefined){
