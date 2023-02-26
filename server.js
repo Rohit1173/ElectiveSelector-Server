@@ -113,7 +113,13 @@ app.post('/signup', async (req, res) => {
 app.post('/profVerify',async(req, res) => {
   try {
     let userEmail = req.body.userEmail
-    let curSem=getsem(userEmail)
+    let curSem="NONE"
+    if(userEmail==='sairohitchappa01@gmail.com'||userEmail==='sanskrutishahu0804@gmail.com'){
+      curSem="NONE"
+    }
+    else{
+     curSem=getsem(userEmail)
+    }
     let user= await User.findOne({userEmail: userEmail})
     if(user===null){
       await User.create({userEmail: userEmail,sem:curSem,el1:req.body.el1,el2:req.body.el2},(err, user) => {
