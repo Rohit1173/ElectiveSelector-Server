@@ -113,9 +113,10 @@ app.post('/signup', async (req, res) => {
 app.post('/profVerify',async(req, res) => {
   try {
     let userEmail = req.body.userEmail
+    let curSem=getsem(userEmail)
     let user= await User.findOne({userEmail: userEmail})
     if(user===null){
-      await User.create(req.body,(err, user) => {
+      await User.create({userEmail: userEmail,sem:curSem,el1:req.body.el1,el2:req.body.el2},(err, user) => {
         if(err){
           console.log(err.message);
           res.status(400).json({status:0,message:err.message});
@@ -290,10 +291,28 @@ app.post('/choose',async(req, res)=>{
 catch(err) {
   console.log(err.message);
   res.status(401).json({status:0,message: err.message});
-
 }
 
 })
+function getsem(email) {
+let curYear=parseInt(new Date().getFullYear())
+let curMonth=parseInt(new Date().getMonth())
+let year=parseInt(email.substring(3,7))
+let x=curYear-year
+if(x==2&&(curMonth>=6&&curMonth<=11)){
+  return "5";
+}
+else if(x==3){
+  if(curMonth>=6&&curMonth<=11){
+    return "7";
+  }
+  else{
+    return "6";
+  }
+}
+
+
+}
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

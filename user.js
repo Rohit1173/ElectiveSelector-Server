@@ -7,6 +7,10 @@ userEmail:{
     type:String,
     required: true,
 },
+sem:{
+ type:String,
+ required: true,
+},
 el1:{
   type:String,
   default:'222'
