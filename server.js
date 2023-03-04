@@ -122,7 +122,7 @@ app.post('/profVerify',async(req, res) => {
     }
     let user= await User.findOne({userEmail: userEmail})
     if(user===null){
-      await User.create({userEmail: userEmail,sem:curSem,el1:req.body.el1,el2:req.body.el2},(err, user) => {
+      await User.create({userEmail: userEmail,semNum:curSem,el1:req.body.el1,el2:req.body.el2},(err, user) => {
         if(err){
           console.log(err.message);
           res.status(400).json({status:0,message:err.message});
