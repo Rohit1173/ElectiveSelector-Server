@@ -7,7 +7,7 @@ userEmail:{
     type:String,
     required: true,
 },
-sem:{
+semNum:{
  type:String,
  required: true,
 },

@@ -300,6 +300,50 @@ catch(err) {
 }
 
 })
+app.post('/selectedElectives',async(req,res)=>{
+  try{
+    let userEmail = req.body.userEmail
+    let user = await User.findOne({userEmail: userEmail})
+    console.log(user)
+    let el1 = await ElectiveData.findOne({semNum: user.semNum,electiveNum:1})
+    let el2 = await ElectiveData.findOne({semNum: user.semNum,electiveNum:2})
+    let sub1= {subTitle:"NA",facultyName:"NA"}
+    let sub2= {subTitle:"NA",facultyName:"NA"}
+    let s1,s2;
+    if(el1!=null){
+       s1=user.el1
+       if(s1[0]=='1'){
+        sub1=el1.sub1
+        
+       }
+       else if(s1[1]=='1'){
+        sub1=el1.sub2
+       }
+       else if(s1[2]=='1'){
+        sub1=el1.sub3
+       }
+    }
+    if(el2!=null){
+      s2=user.el2
+      if(s2[0]=='1'){
+       sub2=el2.sub1
+      }
+      else if(s2[1]=='1'){
+       sub2=el2.sub2
+      }
+      else if(s2[2]=='1'){
+       sub2=el2.sub3
+      }
+   }
+
+   res.status(200).json({status:1,message: {sub1:sub1,sub2:sub2}});
+
+  }
+  catch(err) {
+    console.log(err.message);
+  res.status(401).json({status:0,message: err.message});
+  }
+})
 function getsem(email) {
 let curYear=parseInt(new Date().getFullYear())
 let curMonth=parseInt(new Date().getMonth())
