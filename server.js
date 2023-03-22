@@ -114,7 +114,7 @@ app.post('/profVerify',async(req, res) => {
   try {
     let userEmail = req.body.userEmail
     let curSem="NONE"
-    if(userEmail==='sairohitchappa01@gmail.com'||userEmail==='sanskrutishahu0804@gmail.com'){
+    if(userEmail==='sairohitchappa01@gmail.com'||userEmail==='sanskrutishahu0804@gmail.com'||userEmail==='matamashu03@gmail.com'){
       curSem="NONE"
     }
     else{
