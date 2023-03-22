@@ -129,7 +129,7 @@ app.post('/profVerify',async(req, res) => {
         }
       })
     }
-    if(userEmail==='sairohitchappa01@gmail.com'||userEmail==='sanskrutishahu0804@gmail.com'){
+    if(userEmail==='sairohitchappa01@gmail.com'||userEmail==='sanskrutishahu0804@gmail.com'||userEmail==='matamashu03@gmail.com'){
       res.status(200).json({status:1,message:"prof"})
     }
     else{
