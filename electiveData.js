@@ -44,10 +44,6 @@ let electiveSchema = mongoose.Schema({
         type:String,
         required: true,
     },
-    scheduledAt:{
-        type:String,
-        required: true,
-    }
     });
 
     module.exports = mongoose.model('electiveDetails',electiveSchema);

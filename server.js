@@ -154,8 +154,6 @@ app.post('/sem',async(req,res)=>{
   let e2s1= {subTitle:"NA",facultyName:"NA"}
   let e2s2= {subTitle:"NA",facultyName:"NA"}
   let e2s3= {subTitle:"NA",facultyName:"NA"}
-  let scheduledAt1="NA"
-  let scheduledAt2="NA"
   choiceString1=user.el1
   choiceString2=user.el2
   if(elective1!==null){
@@ -163,7 +161,6 @@ app.post('/sem',async(req,res)=>{
      e1s1=elective1.sub1
      e1s2=elective1.sub2
      e1s3=elective1.sub3
-     scheduledAt1=elective1.scheduledAt
     }
   }
   if(elective2!==null){
@@ -171,12 +168,11 @@ app.post('/sem',async(req,res)=>{
      e2s1=elective2.sub1
      e2s2=elective2.sub2
      e2s3=elective2.sub3
-     scheduledAt2=elective2.scheduledAt
     }
   }
     
   
-  res.status(200).json({status:1,message: {e1s1:e1s1,e1s2:e1s2,e1s3:e1s3,scheduledAt1:scheduledAt1,choiceString1:choiceString1,e2s1:e2s1,e2s2:e2s2,e2s3:e2s3,scheduledAt2:scheduledAt2,choiceString2:choiceString2}});
+  res.status(200).json({status:1,message: {e1s1:e1s1,e1s2:e1s2,e1s3:e1s3,choiceString1:choiceString1,e2s1:e2s1,e2s2:e2s2,e2s3:e2s3,choiceString2:choiceString2}});
   }
   catch(err) {
     console.log(err.message);
