@@ -200,9 +200,15 @@ app.post('/addElectiveDetails', async(req,res)=>{
     let electiveNum=req.body.electiveNum
 
     const elective = await ElectiveData.findOne({semNum:semNum,electiveNum:electiveNum})
+    let flag=false
    if(elective!==null){
-      console.log("You Have Already added Subjects for this Elective , Try contacting the Developer")
-      res.status(401).json({status:0,message: "You Have Already added Subjects for this Elective , Try contacting the Developer"});
+     let branchList=req.body.branchList
+     let elBranchList=elective.branchList
+      flag=commonBranch(branchList,elBranchList)
+   }
+   if(flag){
+    console.log("You Have Already added Subjects for this Elective , Try contacting the Developer")
+    res.status(401).json({status:0,message: "You Have Already added Subjects for this Elective , Try contacting the Developer"});
    }
    else{
    
@@ -376,6 +382,14 @@ else if(x==3){
 }
 
 
+}
+function commonBranch(list1, list2) {
+  for (const str1 of list1) {
+    if (list2.includes(str1)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 app.listen(port, () => {
