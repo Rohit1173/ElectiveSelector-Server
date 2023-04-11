@@ -47,69 +47,6 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-app.post('/login',async (req, res) => {
-  try{
-    let userName= req.body.userName
-    let userPassword= req.body.userPassword
-    let user=await User.findOne({userName:userName});
-  
-    if(user===null){
-      res.status(404).json({status: 0,message:"User not found"})
-    }
-    else{
-    
-    if(bcrypt.compare(userPassword,user.userPassword)){
-      const payload = {userName:userName,userPassword:userPassword} ;
-    const secret = process.env.SECRET_KEY;
-    const options = { expiresIn:maxAge };
-    const token = jwt.sign(payload, secret, options);
-    // Send response
-    res.status(200).json({status: 1, message: token});
-    }
-    else{
-      res.status(404).json({status: 0,message:"Incorrect Password"})
-    }
-  }
-
-  }
-  catch(err){
-    console.error(err);
-    res.status(400).json({status: 0, message: err});
-  }
-
-})
-app.post('/signup', async (req, res) => {
-  try{
-    let userName = req.body.userName
-    let userEmail = req.body.userEmail
-    let userPassword = req.body.userPassword
-    console.log(req.body)
-    let x=await User.findOne({userName: userName});
-    let y=await User.findOne({userEmail: userEmail});
-    if(x!==null){
-      res.status(404).json({status: 0,message:"UserName Already Exists , use a Different one"})
-    }
-    if(y!==null){
-      res.status(404).json({status: 0,message:"E-mail Already Exists try Login Instead"})
-    }
-    User.create(req.body,(err, user)=>{
-      if(err){
-        console.log(err.message);
-        res.status(400).json({status:0,message:err.message});
-      }
-      const payload = {userName:userName,userPassword:userPassword} ;
-               const secret = process.env.SECRET_KEY;
-               const options = { expiresIn:maxAge };
-               const token = jwt.sign(payload, secret, options);
-               res.status(200).json({status: 1, message: token});
-    })
-  }
-  catch(err){
-    console.error(err.message);
-    res.status(400).json({status: 0, message: err.message});
-  }
-
-})
 app.post('/profVerify',async(req, res) => {
   try {
     let userEmail = req.body.userEmail
@@ -142,58 +79,6 @@ app.post('/profVerify',async(req, res) => {
   }
 })
 
-app.get("/jwt",(req, res) => {
-    try{
-      let secretKey=process.env.SECRET_KEY
-      const token = req.get("auth-token");
-      const verfied=jwt.verify(token,secretKey);
-      if(verfied){
-        console.log("SUCCESSFULLY VERIFIED")
-         res.status(200).json({status: 1, message: "SUCCESSFULLY VERIFIED"});
-        }else{
-          console.log("NOT VERIFIED")
-             res.status(401).json({status: 0, message: "NOT VERFIED"});
-        }
-    } catch (error) {
-      console.log(error.message)
-         res.status(401).json({status: 0, message: error.message});
-    }
-});
-
-app.post('/otp',async (req, res) => {
-  try{
-    let userName=req.body.userName
-    let userEmail=req.body.userEmail
-    const otp=Math.floor(1000+Math.random()*9000)
-    let mailOptions = {
-      from: process.env.email,
-      to: userEmail,
-      subject: 'Email Verification for LogIn-SignUp App',
-      text: `Hi ${userName} , here is your otp for the Login SignUp App : ${otp}`
-    };
-    
-    transporter.sendMail(mailOptions, function(error, info){
-      if (error) {
-        console.log(error);
-        res.status(401).json({status:0,message: error.message});
-      } else {
-        // const salt =  bcrypt.genSalt(10)
-        // const hashedOtp =  bcrypt.hash(otp,salt)
-        console.log('Email sent: ' + info.response);
-
-        res.status(200).json({status:1,message:otp});
-      }
-    });
-  
-    
-   
-  }
-  catch(err) {
-    console.log(err.message);
-    res.status(401).json({status:0,message: err.message});
-
-  }
-})
 app.post('/addElectiveDetails', async(req,res)=>{
   try{
     let semNum=req.body.semNum
@@ -246,6 +131,20 @@ app.post('/sem',async(req,res)=>{
   try{
   let semNum=req.body.semNum
   let userEmail=req.body.userEmail
+  let branch=userEmail.substring(1,3);
+  let branchName
+  if(branch=="cs"){
+    branchName="CS"
+  }
+  else if(branch=="it"){
+    branchName="IT"
+  }
+  else if(branch=="ci"){
+    branchName="CSAI"
+  }
+  else if(branch=="cb"){
+    branchName="CSB"
+  }
   const elective1 = await ElectiveData.findOne({semNum:semNum,electiveNum:'1'})
   const elective2 = await ElectiveData.findOne({semNum:semNum,electiveNum:'2'})
   const user=await User.findOne({userEmail:userEmail})
@@ -260,16 +159,20 @@ app.post('/sem',async(req,res)=>{
   choiceString1=user.el1
   choiceString2=user.el2
   if(elective1!==null){
+    if(elective1.branchList.includes(branchName)){
      e1s1=elective1.sub1
      e1s2=elective1.sub2
      e1s3=elective1.sub3
      scheduledAt1=elective1.scheduledAt
+    }
   }
   if(elective2!==null){
+    if(elective2.branchList.includes(branchName)){
      e2s1=elective2.sub1
      e2s2=elective2.sub2
      e2s3=elective2.sub3
      scheduledAt2=elective2.scheduledAt
+    }
   }
     
   
@@ -334,7 +237,6 @@ app.post('/selectedElectives',async(req,res)=>{
        s1=user.el1
        if(s1[0]=='1'){
         sub1=el1.sub1
-        
        }
        else if(s1[1]=='1'){
         sub1=el1.sub2
