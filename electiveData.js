@@ -32,6 +32,10 @@ let electiveSchema = mongoose.Schema({
         type:ElectiveDetails,
         required: true,
     },
+    branchList:{
+        type:List,
+        required: true,
+    },
     addedBy:{
         type:String,
         required: true,

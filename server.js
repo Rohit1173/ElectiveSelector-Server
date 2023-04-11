@@ -292,6 +292,8 @@ app.post('/choose',async(req, res)=>{
     user.el2=choiceString;
   }
   await user.save()
+
+  
   res.status(200).json({status: 1, message:"SUCCESS"});
 }
 catch(err) {
@@ -299,6 +301,18 @@ catch(err) {
   res.status(401).json({status:0,message: err.message});
 }
 
+})
+app.post('/semData',async(req,res)=>{
+  try{
+    let sem=req.body.sem
+    let el=req.body.el
+
+    
+  }
+  catch(err) {
+    console.log(err.message);
+  res.status(401).json({status:0,message: err.message});
+  }
 })
 app.post('/selectedElectives',async(req,res)=>{
   try{
