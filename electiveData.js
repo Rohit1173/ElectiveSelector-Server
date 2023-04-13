@@ -1,16 +1,5 @@
 const mongoose = require('mongoose')
 
-let ElectiveDetails = mongoose.Schema({
-    subTitle:{
-        type:String,
-        required:true
-    },
-    facultyName:{
-        type:String,
-        required:true
-    }
-    });
-
 let electiveSchema = mongoose.Schema({
     semNum:{
         type: String,
@@ -21,16 +10,34 @@ let electiveSchema = mongoose.Schema({
         required: true,
     },
     sub1:{
-        type:ElectiveDetails,
-        required: true,
+        subTitle:{
+            type:String,
+            required:true
+        },
+        facultyName:{
+            type:String,
+            required:true
+        }
     },
     sub2:{
-        type:ElectiveDetails,
-        required: true,
+        subTitle:{
+            type:String,
+            required:true
+        },
+        facultyName:{
+            type:String,
+            required:true
+        }
     },
     sub3:{
-        type:ElectiveDetails,
-        required: true,
+        subTitle:{
+            type:String,
+            required:true
+        },
+        facultyName:{
+            type:String,
+            required:true
+        }
     },
     branchList:{
         type:[String],

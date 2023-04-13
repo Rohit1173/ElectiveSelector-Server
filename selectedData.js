@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const ElectiveDetails= require('./electiveData')
 
 let selectedDataSchema = mongoose.Schema({
 userName:{
@@ -10,8 +11,14 @@ userEmail:{
     required: true,
 },
 sub:{
-  type:ElectiveDetails,
-  required: true,
+  subTitle:{
+    type:String,
+    required:true
+},
+facultyName:{
+    type:String,
+    required:true
+}
 },
 semNum:{
  type:String,
