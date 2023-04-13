@@ -9,6 +9,10 @@ userEmail:{
     type:String,
     required: true,
 },
+sub:{
+  type:ElectiveDetails,
+  required: true,
+},
 semNum:{
  type:String,
  required: true,

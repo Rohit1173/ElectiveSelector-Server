@@ -220,6 +220,7 @@ app.post('/choose',async(req, res)=>{
   let electiveNum=req.body.electiveNum
   let choiceString=req.body.choiceString
   let branchList=req.body.branchList
+  let sub 
   let user = await User.findOne({userEmail: userEmail})
   let elective = await ElectiveData.findOne({semNum:semNum,electiveNum:electiveNum,branchList:branchList})
   if(electiveNum==='1'){
@@ -234,7 +235,16 @@ app.post('/choose',async(req, res)=>{
     res.status(401).json({status:0,message: "Elective Not Yet Released"});
   }
   else{
-    SelectedData.create({userName:userName,userEmail:userEmail,semNum:semNum,electiveNum:electiveNum,branchList:branchList},(err, selectedData)=>{
+    if(choiceString==="100"){
+       sub=elective.sub1
+    }
+    else if(choiceString==="010"){
+      sub=elective.sub2
+   }
+   else if(choiceString==="001"){
+    sub=elective.sub3
+  }
+    SelectedData.create({userName:userName,userEmail:userEmail,sub:sub,semNum:semNum,electiveNum:electiveNum,branchList:branchList},(err, selectedData)=>{
       if(err){
         console.log(err.message);
         res.status(401).json({status:0,message: err.message});
@@ -249,6 +259,25 @@ catch(err) {
   console.log(err.message);
   res.status(401).json({status:0,message: err.message});
 }
+})
+app.post('/semData',async(req, res) => {
+  try{
+  let semNum=req.body.semNum;
+  let electiveNum=req.body.electiveNum;
+  SelectedData.find({semNum:semNum,electiveNum:electiveNum},(err,semData)=>{
+    if(err){
+      res.status(401).json({status:0,message: err.message});
+    }
+    else{
+      res.status(200).json({status:1,message: semData});
+    }
+  })
+  
+  }
+  catch(err) {
+    console.log(err.message);
+  res.status(401).json({status:0,message: err.message});
+  }
 })
 app.post('/selectedElectives',async(req,res)=>{
   try{
