@@ -16,6 +16,10 @@ semNum:{
 el:{
   type:String,
   required: true,
+},
+branchList:{
+  type:[String],
+  required:true,
 }
 
 

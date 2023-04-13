@@ -2,11 +2,14 @@ const express = require('express')
 const mongoose = require('mongoose')
 const User = require('./user')
 const ElectiveData=require('./electiveData')
+const SelectedData=require('./selectedData')
 const bodyParser = require("body-parser");
 const cors = require('cors');
 const jwt = require("jsonwebtoken");
 const bcrypt=require("bcrypt")
 const nodemailer = require('nodemailer');
+const multer = require("multer")
+const path = require("path")
 
 require("dotenv").config();
 require("dotenv/config");
@@ -15,9 +18,10 @@ const maxAge =3*24*60*60
 const app = express()
 const port = 3000
 app.use(cors())
+app.use(express.static(__dirname));
+// app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
-
 mongoose.set('strictQuery', true);
 
 const connectDatabase = async () => {
@@ -41,6 +45,26 @@ let transporter = nodemailer.createTransport({
     pass: process.env.pass
   }
 });
+
+const multerStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, '/uploads/'));
+  },
+  filename: (req, file, cb) => {
+    // const ext = file.mimetype.split("/")[1];
+    // cb(null, `files/admin-${file.fieldname}-${Date.now()}.${ext}`);
+    cb(null, path.join(__dirname, '/uploads/'));
+  },
+});
+
+const upload = multer({
+  storage: multerStorage
+});
+
+
+app.post('/upload', upload.single("myPDF"), (req, res) => {
+  res.send("saved file- ")
+})
 
 
 app.get('/', (req, res) => {
@@ -132,6 +156,7 @@ app.post('/sem',async(req,res)=>{
   let semNum=req.body.semNum
   let userEmail=req.body.userEmail
   let branch=userEmail.substring(1,3);
+ 
   let branchName
   if(branch=="cs"){
     branchName="CS"
@@ -154,13 +179,16 @@ app.post('/sem',async(req,res)=>{
   let e2s1= {subTitle:"NA",facultyName:"NA"}
   let e2s2= {subTitle:"NA",facultyName:"NA"}
   let e2s3= {subTitle:"NA",facultyName:"NA"}
-  choiceString1=user.el1
-  choiceString2=user.el2
+  let el1branchList=[]
+  let el2branchList=[]
+  let choiceString1=user.el1
+  let choiceString2=user.el2
   if(elective1!==null){
     if(elective1.branchList.includes(branchName)){
      e1s1=elective1.sub1
      e1s2=elective1.sub2
      e1s3=elective1.sub3
+     el1branchList=elective1.branchList
     }
   }
   if(elective2!==null){
@@ -168,11 +196,12 @@ app.post('/sem',async(req,res)=>{
      e2s1=elective2.sub1
      e2s2=elective2.sub2
      e2s3=elective2.sub3
+     el2branchList=elective2.branchList
     }
   }
     
   
-  res.status(200).json({status:1,message: {e1s1:e1s1,e1s2:e1s2,e1s3:e1s3,choiceString1:choiceString1,e2s1:e2s1,e2s2:e2s2,e2s3:e2s3,choiceString2:choiceString2}});
+  res.status(200).json({status:1,message: {e1s1:e1s1,e1s2:e1s2,e1s3:e1s3,choiceString1:choiceString1,el1branchList:el1branchList,e2s1:e2s1,e2s2:e2s2,e2s3:e2s3,choiceString2:choiceString2,el2branchList:el2branchList}});
   }
   catch(err) {
     console.log(err.message);
@@ -186,10 +215,13 @@ app.post('/choose',async(req, res)=>{
 
   try{
   let userEmail = req.body.userEmail
+  let userName = req.body.userName
   let semNum=req.body.semNum
   let electiveNum=req.body.electiveNum
   let choiceString=req.body.choiceString
+  let branchList=req.body.branchList
   let user = await User.findOne({userEmail: userEmail})
+  let elective = await ElectiveData.findOne({semNum:semNum,electiveNum:electiveNum,branchList:branchList})
   if(electiveNum==='1'){
     user.el1=choiceString;
   }
@@ -198,26 +230,25 @@ app.post('/choose',async(req, res)=>{
   }
   await user.save()
 
-  
-  res.status(200).json({status: 1, message:"SUCCESS"});
+  if(elective===null){
+    res.status(401).json({status:0,message: "Elective Not Yet Released"});
+  }
+  else{
+    SelectedData.create({userName:userName,userEmail:userEmail,semNum:semNum,electiveNum:electiveNum,branchList:branchList},(err, selectedData)=>{
+      if(err){
+        console.log(err.message);
+        res.status(401).json({status:0,message: err.message});
+      }
+      else{
+         res.status(200).json({status: 1, message:"SUCCESS"});
+      }
+    })
+  }
 }
 catch(err) {
   console.log(err.message);
   res.status(401).json({status:0,message: err.message});
 }
-
-})
-app.post('/semData',async(req,res)=>{
-  try{
-    let sem=req.body.sem
-    let el=req.body.el
-
-    
-  }
-  catch(err) {
-    console.log(err.message);
-  res.status(401).json({status:0,message: err.message});
-  }
 })
 app.post('/selectedElectives',async(req,res)=>{
   try{
