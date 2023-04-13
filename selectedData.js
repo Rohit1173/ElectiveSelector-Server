@@ -13,7 +13,7 @@ semNum:{
  type:String,
  required: true,
 },
-el:{
+electiveNum:{
   type:String,
   required: true,
 },
