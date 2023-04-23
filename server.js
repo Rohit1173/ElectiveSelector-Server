@@ -244,15 +244,35 @@ app.post('/choose',async(req, res)=>{
    else if(choiceString==="001"){
     sub=elective.sub3
   }
-    SelectedData.create({userName:userName,userEmail:userEmail,sub:sub,semNum:semNum,electiveNum:electiveNum,branchList:branchList},(err, selectedData)=>{
-      if(err){
-        console.log(err.message);
-        res.status(401).json({status:0,message: err.message});
+  SelectedData.find({semNum:semNum,electiveNum:electiveNum},(err,semData)=>{
+    if(err){
+      res.status(401).json({status:0,message: err.message});
+    }
+    else{
+      if(semData.length<=74){
+        if(semData.length===74){
+          elective.electiveStatus=false
+        }
+        SelectedData.create({userName:userName,userEmail:userEmail,sub:sub,semNum:semNum,electiveNum:electiveNum,branchList:branchList},(err, selectedData)=>{
+          if(err){
+            console.log(err.message);
+            res.status(401).json({status:0,message: err.message});
+          }
+          else{
+             res.status(200).json({status: 1, message:"SUCCESS"});
+          }
+        })
+
+
       }
       else{
-         res.status(200).json({status: 1, message:"SUCCESS"});
+        elective.electiveStatus=false
+        res.status(401).json({status:0,message: "Elective is Full"});
       }
-    })
+      
+    }
+  })
+    
   }
 }
 catch(err) {
@@ -260,11 +280,50 @@ catch(err) {
   res.status(401).json({status:0,message: err.message});
 }
 })
+app.post('/branches',async(req,res)=>{
+  try{
+  let semNum=req.body.semNum;
+  let electiveNum=req.body.electiveNum;
+  ElectiveData.find({semNum:semNum,electiveNum:electiveNum},(err,data)=>{
+    if(err){
+      res.status(401).json({status:0,message: err.message});
+    }
+    else{
+      let branches=data.map(item=>item.branchList)
+      res.status(200).json({status:1,message: branches});
+    }
+  })
+
+}
+catch(err) {
+  console.log(err.message);
+res.status(401).json({status:0,message: err.message});
+}
+})
+
+app.post('/subjects',async(req,res)=>{
+  try{
+  let semNum=req.body.semNum;
+  let electiveNum=req.body.electiveNum;
+  let branchList=req.body.branchList;
+  let elective = await ElectiveData.findOne({semNum:semNum,electiveNum:electiveNum,branchList:branchList})
+
+  res.status(200).json({status:1,message: {sub1:elective.sub1,sub2:elective.sub2,sub3:elective.sub3}});
+
+}
+catch(err) {
+  console.log(err.message);
+res.status(401).json({status:0,message: err.message});
+}
+})
+
 app.post('/semData',async(req, res) => {
   try{
   let semNum=req.body.semNum;
   let electiveNum=req.body.electiveNum;
-  SelectedData.find({semNum:semNum,electiveNum:electiveNum},(err,semData)=>{
+  let sub=req.body.sub
+  let branchList=req.body.branchList;
+  SelectedData.find({semNum:semNum,electiveNum:electiveNum,sub:sub,branchList:branchList},(err,semData)=>{
     if(err){
       res.status(401).json({status:0,message: err.message});
     }

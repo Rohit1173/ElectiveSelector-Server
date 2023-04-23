@@ -17,6 +17,10 @@ let electiveSchema = mongoose.Schema({
         facultyName:{
             type:String,
             required:true
+        },
+        subStatus:{
+            type:Boolean,
+            default:false
         }
     },
     sub2:{
