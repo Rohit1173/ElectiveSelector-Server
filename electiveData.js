@@ -20,7 +20,7 @@ let electiveSchema = mongoose.Schema({
         },
         subStatus:{
             type:Boolean,
-            default:false
+            default:true
         }
     },
     sub2:{
@@ -31,6 +31,10 @@ let electiveSchema = mongoose.Schema({
         facultyName:{
             type:String,
             required:true
+        },
+        subStatus:{
+            type:Boolean,
+            default:true
         }
     },
     sub3:{
@@ -41,6 +45,10 @@ let electiveSchema = mongoose.Schema({
         facultyName:{
             type:String,
             required:true
+        },
+        subStatus:{
+            type:Boolean,
+            default:true
         }
     },
     branchList:{

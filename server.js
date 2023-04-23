@@ -251,7 +251,7 @@ app.post('/choose',async(req, res)=>{
     else{
       if(semData.length<=74){
         if(semData.length===74){
-          elective.electiveStatus=false
+          
         }
         SelectedData.create({userName:userName,userEmail:userEmail,sub:sub,semNum:semNum,electiveNum:electiveNum,branchList:branchList},(err, selectedData)=>{
           if(err){
@@ -266,7 +266,7 @@ app.post('/choose',async(req, res)=>{
 
       }
       else{
-        elective.electiveStatus=false
+        
         res.status(401).json({status:0,message: "Elective is Full"});
       }
       
@@ -323,11 +323,13 @@ app.post('/semData',async(req, res) => {
   let electiveNum=req.body.electiveNum;
   let sub=req.body.sub
   let branchList=req.body.branchList;
+  console.log(semNum,electiveNum,sub,branchList)
   SelectedData.find({semNum:semNum,electiveNum:electiveNum,sub:sub,branchList:branchList},(err,semData)=>{
     if(err){
       res.status(401).json({status:0,message: err.message});
     }
     else{
+      console.log(semNum,electiveNum,sub,branchList)
       res.status(200).json({status:1,message: semData});
     }
   })
