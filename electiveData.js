@@ -20,6 +20,7 @@ let electiveSchema = mongoose.Schema({
         },
         pdfUrl:{
             type:String,
+            default:"NA",
             required:false
         },
         subStatus:{
@@ -38,6 +39,7 @@ let electiveSchema = mongoose.Schema({
         },
         pdfUrl:{
             type:String,
+            default:"NA",
             required:false
         },
         subStatus:{
@@ -56,6 +58,7 @@ let electiveSchema = mongoose.Schema({
         },
         pdfUrl:{
             type:String,
+            default:"NA",
             required:false
         },
         subStatus:{
