@@ -20,7 +20,7 @@ let electiveSchema = mongoose.Schema({
         },
         pdfUrl:{
             type:String,
-            required:true
+            required:false
         },
         subStatus:{
             type:Boolean,
@@ -38,7 +38,7 @@ let electiveSchema = mongoose.Schema({
         },
         pdfUrl:{
             type:String,
-            required:true
+            required:false
         },
         subStatus:{
             type:Boolean,
@@ -56,7 +56,7 @@ let electiveSchema = mongoose.Schema({
         },
         pdfUrl:{
             type:String,
-            required:true
+            required:false
         },
         subStatus:{
             type:Boolean,
