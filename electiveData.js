@@ -18,6 +18,10 @@ let electiveSchema = mongoose.Schema({
             type:String,
             required:true
         },
+        pdfUrl:{
+            type:String,
+            required:true
+        },
         subStatus:{
             type:Boolean,
             default:true
@@ -32,6 +36,10 @@ let electiveSchema = mongoose.Schema({
             type:String,
             required:true
         },
+        pdfUrl:{
+            type:String,
+            required:true
+        },
         subStatus:{
             type:Boolean,
             default:true
@@ -43,6 +51,10 @@ let electiveSchema = mongoose.Schema({
             required:true
         },
         facultyName:{
+            type:String,
+            required:true
+        },
+        pdfUrl:{
             type:String,
             required:true
         },

@@ -244,14 +244,22 @@ app.post('/choose',async(req, res)=>{
    else if(choiceString==="001"){
     sub=elective.sub3
   }
-  SelectedData.find({semNum:semNum,electiveNum:electiveNum},(err,semData)=>{
+  SelectedData.find({semNum:semNum,electiveNum:electiveNum,sub:sub,branchList:branchList},(err,semData)=>{
     if(err){
       res.status(401).json({status:0,message: err.message});
     }
     else{
       if(semData.length<=74){
         if(semData.length===74){
-          
+          if(choiceString==="100"){
+           elective.sub1.subStatus=false
+         }
+         else if(choiceString==="010"){
+           elective.sub2.subStatus=false
+        }
+        else if(choiceString==="001"){
+           elective.sub3.subStatus=false
+       }
         }
         SelectedData.create({userName:userName,userEmail:userEmail,sub:sub,semNum:semNum,electiveNum:electiveNum,branchList:branchList},(err, selectedData)=>{
           if(err){
